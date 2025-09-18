@@ -1,0 +1,54 @@
+title: "Food & Health Wisdom"
+description: "A collection of insights about nutrition, health, and mindful living"
+url: "http://localhost:4000"
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# SEO settings
+author: "Sri Priyesha"
+twitter:
+  username: sripriyesha
+social:
+  name: Sri Priyesha
+  links:
+    - https://github.com/sripriyesha
+
+# Collections
+collections:
+  images:
+    output: false
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+      author: "Sri Priyesha"
+
+# Performance
+sass:
+  style: compressed
+
+# GitHub Pages specific settings
+github: [metadata]
