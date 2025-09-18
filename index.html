@@ -627,26 +627,45 @@
         }
 
         function setupTouchEvents(modal) {
-            const modalImage = modal.querySelector('.modal-content');
+            // Set up touch events on the entire modal area, not just the image
+            const modalElement = modal;
             
-            modalImage.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-                touchStartY = e.changedTouches[0].screenY;
+            modalElement.addEventListener('touchstart', function(e) {
+                // Only handle single touch
+                if (e.touches.length === 1) {
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                }
             }, { passive: true });
 
-            modalImage.addEventListener('touchend', function(e) {
-                touchEndX = e.changedTouches[0].screenX;
-                touchEndY = e.changedTouches[0].screenY;
-                handleSwipe();
+            modalElement.addEventListener('touchend', function(e) {
+                // Only handle single touch
+                if (e.changedTouches.length === 1) {
+                    touchEndX = e.changedTouches[0].clientX;
+                    touchEndY = e.changedTouches[0].clientY;
+                    handleSwipe();
+                }
             }, { passive: true });
+
+            // Prevent default touch behavior on the modal to avoid interference
+            modalElement.addEventListener('touchmove', function(e) {
+                // Allow vertical scrolling but prevent horizontal scrolling
+                const touch = e.touches[0];
+                const deltaX = Math.abs(touch.clientX - touchStartX);
+                const deltaY = Math.abs(touch.clientY - touchStartY);
+                
+                if (deltaX > deltaY) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
         }
 
         function handleSwipe() {
-            const swipeThreshold = 50; // Minimum distance for a swipe
+            const swipeThreshold = 30; // Reduced threshold for easier swiping
             const swipeDistanceX = touchEndX - touchStartX;
             const swipeDistanceY = Math.abs(touchEndY - touchStartY);
             
-            // Only trigger swipe if horizontal movement is greater than vertical
+            // Only trigger swipe if horizontal movement is greater than vertical and meets threshold
             if (Math.abs(swipeDistanceX) > swipeThreshold && Math.abs(swipeDistanceX) > swipeDistanceY) {
                 if (swipeDistanceX > 0) {
                     // Swipe right - show previous image
